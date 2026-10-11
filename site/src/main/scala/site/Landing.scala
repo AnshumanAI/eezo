@@ -26,7 +26,11 @@ object Landing {
   )
 
   private val Steps: Vector[(String, String, String)] = Vector(
-    ("eezo new myUnicorn", "Scaffold", "A Main, one route, plus build files. Nothing to configure."),
+    (
+      "eezo new myUnicorn",
+      "Scaffold",
+      "A Main, one route, plus build files. Nothing to configure."
+    ),
     ("eezo dev", "Serve", "Restarts on save. A broken compile keeps the old code serving."),
     ("eezo deploy", "Ship", "Stages the jars, builds the image, migrates, waits for health.")
   )
@@ -242,12 +246,12 @@ object Landing {
     )
 
   private def edgeCard(
-                        artifact: String,
-                        entry: String,
-                        layers: String,
-                        href: String,
-                        example: String
-                      ): Html =
+      artifact: String,
+      entry: String,
+      layers: String,
+      href: String,
+      example: String
+  ): Html =
     li(
       Attrs.cls := "layer-card",
       code(Attrs.cls := "artifact", s""""io.eezo" %% "$artifact""""),

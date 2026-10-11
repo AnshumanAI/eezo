@@ -5,11 +5,11 @@ import io.eezo.live.Event
 import io.eezo.live.Live
 
 /** The front page's small proof that the live layer is real: a number that lives on the server.
- *
- * Every click is an event up the socket; the new number comes back as one patch. The count is a
- * slice of [[Page]]'s state and so of this page's alone: a second tab starts from zero, which is
- * the point being made.
- */
+  *
+  * Every click is an event up the socket; the new number comes back as one patch. The count is a
+  * slice of [[Page]]'s state and so of this page's alone: a second tab starts from zero, which is
+  * the point being made.
+  */
 object Clicks {
 
   def handle(event: Event, count: Int): Int = event.name match {
@@ -27,7 +27,7 @@ object Clicks {
         p(
           Attrs.cls := "live-count",
           strong(count),
-          if (count == 1) " click" else " clicks",
+          if (count == 1) " click" else " clicks"
         ),
         button(Attrs.cls := "btn btn-small", Attrs.tpe := "button", Live.onClick("inc"), "+1"),
         button(

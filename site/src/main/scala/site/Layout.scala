@@ -16,15 +16,15 @@ object Layout {
   val Origin: String = "https://eezo.io"
 
   /** A whole document around `content`, which is a function of the live state the page shares with
-   * its chrome: see [[Page]]. The request is what the header needs: the theme this browser chose,
-   * and the token its toggle posts with.
-   */
+    * its chrome: see [[Page]]. The request is what the header needs: the theme this browser chose,
+    * and the token its toggle posts with.
+    */
   def page(
-            request: Request,
-            meta: Meta,
-            bodyClass: String,
-            initial: Page.State = Page.State.initial
-          )(content: Page.State => Html): Html =
+      request: Request,
+      meta: Meta,
+      bodyClass: String,
+      initial: Page.State = Page.State.initial
+  )(content: Page.State => Html): Html =
     Html.doctype ++ html(
       Attrs.lang := "en",
       Theme.current(request).map(Attrs.data("theme") := _),
@@ -82,10 +82,10 @@ object Layout {
     )
 
   /** The mascot and the wordmark beside it. The image is served three times the size it is shown
-   * at, so it stays crisp on a dense screen; its dimensions are on the tag so the header does not
-   * shift while it loads. `mods` is for a host that needs another attribute on the anchor, as the
-   * API pages do.
-   */
+    * at, so it stays crisp on a dense screen; its dimensions are on the tag so the header does not
+    * shift while it loads. `mods` is for a host that needs another attribute on the anchor, as the
+    * API pages do.
+    */
   def logo(mods: Attr*): Html =
     a(
       Attrs.cls                := "logo",
@@ -128,8 +128,8 @@ object Layout {
   }
 
   /** The way into the search dialog, with the shortcut beside it. Both spellings of the shortcut
-   * are rendered and the stylesheet shows the one for the keyboard at hand.
-   */
+    * are rendered and the stylesheet shows the one for the keyboard at hand.
+    */
   private val searchButton: Html =
     button(
       Attrs.cls                 := "search-button",
