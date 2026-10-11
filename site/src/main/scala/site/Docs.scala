@@ -81,7 +81,6 @@ object Docs {
         h1("Documentation"),
         p(
           Attrs.cls := "lede",
-          "Four kinds of page, for four kinds of question. ",
           "New here? Read the ",
           a(Attrs.href := "/docs/overview", "overview"),
           " first, then start with a tutorial."

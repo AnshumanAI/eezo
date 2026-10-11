@@ -3,7 +3,7 @@
 </p>
 <h1 align="center">eezo</h1>
 <p align="center">
-  A Scala 3 web framework where the case class is the source of truth.<br>
+  A Scala 3 web framework where your domain model is the source of truth.<br>
   Direct style on virtual threads. Deploy with one command.
 </p>
 <p align="center">
@@ -24,8 +24,8 @@
 
 ## What eezo is
 
-A model declares what it is, and eezo derives the rest from that one declaration: its table in
-Postgres, its HTML form, and the routes that serve it.
+Declare your data model, and eezo derives the rest from that one declaration: its table in
+Postgres, its HTML form, and CRUD routes that serve it.
 
 ```scala
 case class Post(
@@ -37,32 +37,36 @@ case class Post(
 ) derives Table, Form, Resource
 ```
 
-Those three words mount seven CRUD routes, index, new, create, show, edit, update and destroy,
-served in a browser over rows in Postgres, with no controller, no repository and no template
-written by hand. A handwritten route is a plain `def` in a file whose name is the path, and it
-wins over a derived route on the same path, so you take over exactly the pages you need and keep
-the rest derived.
+A case class automatically derives its Postgres table and a type-safe query API.
+As you change your data model, Eezo detects schema changes. When you're ready, you can commit them to a fingerprinted SQL migration.
 
-Handlers are ordinary functions from a request to a response. There is no effect system to learn:
-eezo runs Jetty on JDK virtual threads, so a handler blocks on the database or on an external API
-and the thread it holds costs nothing.
+A case class also gets 7 CRUD routes: index, new, create, show, edit, update and destroy,
+served in a browser over rows in Postgres, with no need for a controller, repository or template
+written by hand. You can add your own routes as a plain `def` in a file, and the file path becomes the HTTP route path.
+You can also override a derived route on the same path.
 
-Everything an application has is a value it names in `Main`: the schema, the route table, the
-layout every HTML reply comes back in. Nothing is found by reflection, so a missing plugin, or a
-derivation for an edge the application does not have, is a compile error rather than a message at
-runtime.
+Handlers are ordinary functions from a request to a response.
+Eezo runs on virtual threads, so blocking on the database or on an external API is cheap.
+
+UIs are server-side rendered, with minimal functional Scala. A `Component[State]` has `init`, `update` and `render`, and can return HTML with Scala functions.
+For the frontend, the browser gets a thin JS client which sends events to the server, and the server renders DOM diffs that get patched on the UI.
+
+No need for
+- effect systems
+- runtime reflection
+- plugins
+- JavaScript
+- configurations
+
+Deploying is done with `eezo deploy` on Fly.io.
 
 ## Requirements
 
-- **JDK 25 or newer.** JEP 491, delivered in JDK 24, removed virtual thread pinning on
-  `synchronized`. JDK 25 is the first LTS release carrying it, and the server design depends on
-  it. The build refuses to load on anything older, with the reason.
-- **Scala 3.8.4.** eezo tracks Scala 3.8.x. The framework is written with braces rather than
-  significant indentation, and `-no-indent` is part of the recommended compiler flags.
+- **JDK 25 or newer.** Eezo needs virtual threads to not be pinned on `synchronized`.
+- **Scala 3.8.4.** 
 - **sbt 1.5.8 or newer, or sbt 2.0.6 or newer.** The plugin is published for both.
-- **Postgres**, for an application with a database edge. The default connection is a local
-  Postgres on port 5442; [Configure the database](docs/how-to/configure-the-database.md) has the
-  one Docker command that starts it.
+- **Postgres**, for an application with a database layer. The default connection is a local
+  Postgres. One of the few Eezo configurations is for [the database](docs/how-to/configure-the-database.md).
 
 ## Install
 
@@ -87,21 +91,21 @@ scalacOptions ++= Seq("-release", "25", "-deprecation", "-feature", "-unchecked"
 run / fork := true
 ```
 
-Every artifact is published at one version, under the `io.eezo` group:
+Every artifact is published at the same version, under the `io.eezo` group:
 
-| artifact | what it carries |
-|---|---|
-| `eezo` | the umbrella and the default dependency: both edges and `EezoApp` |
-| `eezo-http` | the http edge: Jetty, requests and responses, routing, `Form`, `Resource`, `Layout`, `HttpApp` |
-| `eezo-db` | the database edge: the pool, the `sql` interpolator, transactions, `Table`, schema commands and migrations, `DbApp` |
-| `eezo-auth` | sessions, email and password sign in, CSRF, route guards and row ownership |
-| `eezo-live` | state held on the server and a thin browser: the diff and patch protocol, the client runtime, PubSub |
-| `eezo-core` | what the others build on: configuration, the HTML tree and DSL, the model key `Id[T]` |
-| `sbt-eezo` | the sbt plugin that generates the route table, for sbt 1 and sbt 2 |
+| artifact | what it carries                                                                                                      |
+|---|----------------------------------------------------------------------------------------------------------------------|
+| `eezo` | the umbrella and the default dependency                                                                              |
+| `eezo-http` | the http layer: servers, requests and responses, routing, `Form`, `Resource`, `Layout`, `HttpApp`                    |
+| `eezo-db` | the database layer: the pool, the `sql` interpolator, transactions, `Table`, schema commands and migrations, `DbApp` |
+| `eezo-auth` | sessions, email and password sign in, CSRF, route guards and row ownership                                           |
+| `eezo-live` | server-side rendered UI with the thin browser client: the diff and patch protocol, the client runtime, PubSub        |
+| `eezo-core` | what the others build on: configuration, HTML tree and DSL, derivation, model keys                                   |
+| `sbt-eezo` | the sbt plugin that generates the route table, for sbt 1 and sbt 2                                                   |
 
-An application has one or two edges, the http edge and the database edge, and depends on the
-artifact of the edges it has. `eezo-http` alone carries `HttpApp`, `eezo-db` alone carries
-`DbApp`, and the umbrella carries both and `EezoApp`. [Edges](docs/explanation/edges.md) explains
+An application has one or two layers, the http layer and the database layer, and depends on the
+artifact of the layers it has. `eezo-http` alone carries `HttpApp`, `eezo-db` alone carries
+`DbApp`, and the umbrella carries both and `EezoApp`. [Layers](docs/explanation/layers.md) explains
 the split.
 
 ## Hello, eezo
@@ -155,7 +159,7 @@ minutes, and [Routing](docs/explanation/routing.md) says how a file name becomes
 
 ## From a model to an application
 
-Add the database edge by depending on the umbrella, naming a schema, and deriving `Table`:
+Add the database layer by depending on the umbrella, naming a schema, and deriving `Table`:
 
 ```scala
 import io.eezo.EezoApp
@@ -252,7 +256,7 @@ sbt "blog/run sync --apply"     # creates the tables, then:
 sbt blog/run                    # http://localhost:8080, posts under /admin/posts
 ```
 
-Each example has a README that explains its shape and shows the derivation of the edge it does
+Each example has a README that explains its shape and shows the derivation of the layer it does
 not have failing to compile.
 
 ## Documentation
