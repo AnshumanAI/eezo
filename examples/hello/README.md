@@ -47,5 +47,5 @@ case class Note(id: Id[Note], text: String) derives Table
 ```
 
 The cure is one changed line in `build.sbt`: depend on `"io.eezo" %% "eezo"` instead and extend
-`EezoApp`, as `../blog` and `../todo` do. Opting out of an layer is the deliberate act, and it costs
+`EezoApp`, as `../blog` and `../todo` do. Opting out of a layer is the deliberate act, and it costs
 that one line.

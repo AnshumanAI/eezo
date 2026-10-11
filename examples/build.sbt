@@ -33,7 +33,7 @@ lazy val commonSettings = Seq(
 // Each example depends on the artifact of the layers it has, and that dependency is the one line
 // that decides what compiles in it. `eezo-http` alone carries `HttpApp`, `Form` and `Resource`;
 // `eezo-db` alone carries `DbApp` and `Table`; the umbrella `eezo` carries both and `EezoApp`. A
-// derivation for an layer the example does not have is a compile error, because the type is not on
+// derivation for a layer the example does not have is a compile error, because the type is not on
 // the classpath: see each example's README for the line that proves it.
 def layer(artifact: String) = "io.eezo" %% artifact % EezoVersion.value
 

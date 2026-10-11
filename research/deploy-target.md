@@ -67,7 +67,7 @@ evaluating eezo would deploy, show a colleague, and find the app dead. Beyond th
 trial, "All organizations (except for Linked Organizations) require a credit card
 on file" ([fly.io/docs/about/pricing](https://fly.io/docs/about/pricing/)), and
 the only managed Postgres option starts at **$38/month**
-([fly.io/docs/mpg](https://fly.io/docs/mpg/)). Fly's own marketing acknowllayers it
+([fly.io/docs/mpg](https://fly.io/docs/mpg/)). Fly's own marketing acknowledges it
 "no longer offers a free tier for new users"
 ([Render's comparison article](https://render.com/articles/platforms-with-a-real-free-tier-for-developers-in-2026),
 a competitor source, so treat as directional).

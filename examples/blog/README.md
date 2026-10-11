@@ -133,7 +133,7 @@ schema commands.
 `Table` is the database layer's derivation and `Form` and `Resource` are the http layer's. This
 application depends on the umbrella, so both layers are on its classpath and all three derive.
 `../hello` has the http layer only and shows `derives Table` failing to compile; `../reminders` has
-the database layer only and shows `derives Form` failing. Opting out of an layer is one changed line
+the database layer only and shows `derives Form` failing. Opting out of a layer is one changed line
 in `build.sbt`.
 
 `eezo-auth` is named in `build.sbt` beside the umbrella, even though the umbrella already carries

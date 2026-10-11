@@ -51,13 +51,13 @@ and would leave the third shape with no Form for the handwritten half to call.
 
 ### Application
 
-**layer**:
+**Layer**:
 One of the two sides of an application that eezo brings up and takes down for it: the database
 layer, which is the connection to the database and the schema commands, and the http layer, which
 is the server and the routes. An application declares which layers it has, one or both, and a
 derivation belongs to one layer: Table to the database layer, Form and Resource to the http layer.
-Deriving for an layer the application does not have is a compile error.
-_Avoid_: half, side, layer, backend, runtime
+Deriving for a layer the application does not have is a compile error.
+_Avoid_: half, side, edge, backend, runtime
 
 **Layout**:
 The one frame every HTML reply comes back in, the derived pages, the login page and the error page

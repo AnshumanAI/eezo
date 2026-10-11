@@ -63,7 +63,7 @@ Deploying is done with `eezo deploy` on Fly.io.
 ## Requirements
 
 - **JDK 25 or newer.** Eezo needs virtual threads to not be pinned on `synchronized`.
-- **Scala 3.8.4.** 
+- **Scala 3.8.4.**
 - **sbt 1.5.8 or newer, or sbt 2.0.6 or newer.** The plugin is published for both.
 - **Postgres**, for an application with a database layer. The default connection is a local
   Postgres. One of the few Eezo configurations is for [the database](docs/how-to/configure-the-database.md).
@@ -145,7 +145,7 @@ object Hello {
 }
 ```
 
-The `Hello` file also the HTTP route. The plugin reads `app/Hello.scala`, mounts `GET /hello` calling
+The `Hello` file is also the HTTP route. The plugin reads `app/Hello.scala`, mounts `GET /hello` calling
 `def hello`, and writes the table to a generated `io.eezo.generated.Routes`, which `Main` contains as
 its `routes`. A page is a value of Eezo's own HTML DSL. `HttpApp` brings `main`
 with it:
@@ -161,7 +161,7 @@ minutes, and [Routing](docs/explanation/routing.md) says how a file name becomes
 
 ## From a model to an application
 
-Add the database layer by depending on the either `eezo` or just `eezo-db`. 
+Add the database layer by depending on either `eezo` or just `eezo-db`. 
 Make your case class derive `Table`, then add your tables (one line) to your schema:
 
 ```scala

@@ -4,7 +4,7 @@ An eezo application talks to a database, serves HTTP, or does both, and it says 
 artifact it depends on. This page is about what that choice buys you, what it forbids, and how
 the two halves fit together when you have both.
 
-## What an layer is
+## What a layer is
 
 An layer is one side of the application that eezo brings up before your code runs and takes
 down after:
@@ -17,7 +17,7 @@ down after:
   then returns, so the database layer closes after the last request.
 
 A derivation belongs to one layer. `Table` is the database layer's. `Form` and `Resource` are the
-http layer's. If your application doesn't have an layer, that layer's derivations aren't on the
+http layer's. If your application doesn't have a layer, that layer's derivations aren't on the
 classpath, and asking for one is a compile error.
 
 ## Three artifacts, three entry traits

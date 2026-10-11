@@ -239,13 +239,13 @@ object Landing {
       ),
       ul(
         Attrs.cls := "layer-cards",
-        edgeCard("eezo-http", "HttpApp", "http only", "/docs/examples/hello", "hello"),
-        edgeCard("eezo-db", "DbApp", "database only", "/docs/examples/reminders", "reminders"),
-        edgeCard("eezo", "EezoApp", "all", "/docs/examples/blog", "blog")
+        layerCard("eezo-http", "HttpApp", "http only", "/docs/examples/hello", "hello"),
+        layerCard("eezo-db", "DbApp", "database only", "/docs/examples/reminders", "reminders"),
+        layerCard("eezo", "EezoApp", "all", "/docs/examples/blog", "blog")
       )
     )
 
-  private def edgeCard(
+  private def layerCard(
       artifact: String,
       entry: String,
       layers: String,
