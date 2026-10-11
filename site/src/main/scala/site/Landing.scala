@@ -91,7 +91,7 @@ object Landing {
         pillars,
         steps,
         features,
-        edges,
+        layers,
         closing
       )
     )
@@ -223,18 +223,18 @@ object Landing {
       )
     )
 
-  private def edges: Html =
+  private def layers: Html =
     section(
-      Attrs.cls := "edges",
+      Attrs.cls := "layers",
       div(
-        Attrs.cls := "edges-copy",
+        Attrs.cls := "layers-copy",
         h2("Take the layers you need"),
         p(
           "An application has a database layer, an http layer, or both. Import the right artifact for your app."
         )
       ),
       ul(
-        Attrs.cls := "edge-cards",
+        Attrs.cls := "layer-cards",
         edgeCard("eezo-http", "HttpApp", "http only", "/docs/examples/hello", "hello"),
         edgeCard("eezo-db", "DbApp", "database only", "/docs/examples/reminders", "reminders"),
         edgeCard("eezo", "EezoApp", "all", "/docs/examples/blog", "blog")
@@ -244,14 +244,14 @@ object Landing {
   private def edgeCard(
                         artifact: String,
                         entry: String,
-                        edges: String,
+                        layers: String,
                         href: String,
                         example: String
                       ): Html =
     li(
-      Attrs.cls := "edge-card",
+      Attrs.cls := "layer-card",
       code(Attrs.cls := "artifact", s""""io.eezo" %% "$artifact""""),
-      p(strong(entry), " · ", edges),
+      p(strong(entry), " · ", layers),
       a(Attrs.href := href, s"See $example →")
     )
 

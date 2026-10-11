@@ -11,8 +11,8 @@ tutorials build; the version string in them changes with every commit.
 as `sbt "run <command> <args>"`, so `eezo status` and `sbt "run status"` are the same code
 path, and so is the sbt task `eezoStatus`.
 
-The application's `main` is inherited from its entry trait. Each edge adds its commands: the
-database edge's eight and the http edge's two. `help` is matched before either, so no edge can
+The application's `main` is inherited from its entry trait. Each layer adds its commands: the
+database layer's eight and the http layer's two. `help` is matched before either, so no layer can
 shadow it. No arguments runs the application.
 
 ## Commands
@@ -21,19 +21,19 @@ shadow it. No arguments runs the application.
 |---|---|---|---|
 | `new <name>` | launcher | `~/.eezo/eezo-version` | scaffolds `./<name>` |
 | `dev` | sbt task | | serves with restart on save, the route listing and the reload client |
-| `routes [--json]` | http edge | | the mounted table and boot's warnings |
-| `status [--json]` | database edge | a database | the model against the live database |
-| `sync [--apply] [--force] [--json]` | database edge | a database | the diff, applied directly with `--apply` |
-| `freeze <name...> [--accept-all\|--skip-destructive] [--json]` | database edge | | writes a migration from the snapshot diff |
-| `migrate [--apply] [--json]` | database edge | a database | lists pending migrations, applies them, verifies |
-| `reset [--json]` | database edge | a database | drops every table and recreates from the model |
-| `drop [--json]` | database edge | a database | drops every table and the ledger |
-| `dump [--json]` | database edge | | prints the model's snapshot |
-| `ddl [--json]` | database edge | | prints the full DDL, one statement per line |
+| `routes [--json]` | http layer | | the mounted table and boot's warnings |
+| `status [--json]` | database layer | a database | the model against the live database |
+| `sync [--apply] [--force] [--json]` | database layer | a database | the diff, applied directly with `--apply` |
+| `freeze <name...> [--accept-all\|--skip-destructive] [--json]` | database layer | | writes a migration from the snapshot diff |
+| `migrate [--apply] [--json]` | database layer | a database | lists pending migrations, applies them, verifies |
+| `reset [--json]` | database layer | a database | drops every table and recreates from the model |
+| `drop [--json]` | database layer | a database | drops every table and the ledger |
+| `dump [--json]` | database layer | | prints the model's snapshot |
+| `ddl [--json]` | database layer | | prints the full DDL, one statement per line |
 | `build` | launcher | | stages `target/eezo/stage/` |
 | `deploy [--app <name>] [--target fly]` | launcher | the Fly CLI | builds, deploys, migrates, waits for health |
 | `upgrade` | launcher | Maven Central | moves the command line, what `new` scaffolds, and the project in the current directory to the latest release |
-| `help` | both edges | | the command table |
+| `help` | both layers | | the command table |
 
 `freeze` takes everything after it that isn't a flag as the migration's name, joined with
 spaces, so `eezo freeze add isbn to book` names the migration `add_isbn_to_book`. Without a
@@ -53,7 +53,7 @@ umbrella runs the drift check first, and serves with the database down after a w
 
 ## `--json`
 
-Every edge command takes `--json`, which renders the same result through the JSON renderer.
+Every layer command takes `--json`, which renders the same result through the JSON renderer.
 Exit codes are the same in both modes. Each body carries a `"command"` discriminator. A failure
 line goes to stderr as `{"error": "..."}`.
 

@@ -137,7 +137,7 @@ object Docs {
 
   /** The modules an application depends on, each a door into the generated API. */
   private val Modules: Vector[(String, String, String)] = Vector(
-    ("io.eezo", "eezo", "The umbrella: EezoApp, both edges."),
+    ("io.eezo", "eezo", "The umbrella: EezoApp, both layers."),
     ("io.eezo.core", "eezo-core", "The HTML tree and DSL, Id, Store."),
     ("io.eezo.http", "eezo-http", "Request, Response, routes, Form, Resource, sessions, CSRF."),
     ("io.eezo.db", "eezo-db", "The connection, sql, transactions, Table, Schema, migrations."),

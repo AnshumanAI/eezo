@@ -170,7 +170,7 @@ That is a few hundred lines. Skiff's own `Migrations.scala` is 136 lines and alr
 
 The precedent is strong. Ecto (Elixir/Phoenix), Active Record (Rails) and Django all ship their own runner rather than wrapping a third party one, and all three get portability from a typed schema DSL rather than from SQL text. Discussed in §3.
 
-The counterargument is real and should be stated: Flyway has fifteen years of edge case handling in `SQLiteParser`, statement splitting, encoding detection, BOM filtering, dollar quoted Postgres bodies, and lock retry. Rewriting that badly is a genuine risk. Skiff's own hand rolled rollback path shows the hazard: `Migrations.applyScript` splits statements by scanning lines, which breaks on any statement containing a semicolon inside a string literal or a `$$` quoted function body.
+The counterargument is real and should be stated: Flyway has fifteen years of layer case handling in `SQLiteParser`, statement splitting, encoding detection, BOM filtering, dollar quoted Postgres bodies, and lock retry. Rewriting that badly is a genuine risk. Skiff's own hand rolled rollback path shows the hazard: `Migrations.applyScript` splits statements by scanning lines, which breaks on any statement containing a semicolon inside a string literal or a `$$` quoted function body.
 
 ---
 
@@ -529,7 +529,7 @@ If the lock is unavailable Flyway retries at one second intervals up to a config
 
 The crucial property: a Postgres advisory lock is **released automatically when the session ends**. A pod that is SIGKILLed mid migration releases its lock when the connection drops. There is no stale lock.
 
-**Liquibase** takes the opposite approach: a row in `DATABASECHANGELOGLOCK` with `LOCKED=1`. If the process dies the row stays locked and a human must run `liquibase release-locks`, which is documented as executing `UPDATE DATABASECHANGELOGLOCK SET LOCKED=0`. In a Kubernetes rollout, one OOM killed pod wedges every subsequent deploy until someone intervenes manually. This is a well known operational failure mode and it is a direct consequence of implementing the lock in application state rather than database state.
+**Liquibase** takes the opposite approach: a row in `DATABASECHANGELOGLOCK` with `LOCKED=1`. If the process dies the row stays locked and a human must run `liquibase release-locks`, which is documented as executing `UPDATE DATABASECHANGELOGLOCK SET LOCKED=0`. In a Kubernetes rollout, one OOM killed pod wlayers every subsequent deploy until someone intervenes manually. This is a well known operational failure mode and it is a direct consequence of implementing the lock in application state rather than database state.
 
 **For an eezo owned runner**, the design follows:
 
