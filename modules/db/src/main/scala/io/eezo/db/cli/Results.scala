@@ -5,9 +5,9 @@ import io.eezo.db.schema.Change
 
 import java.nio.file.Path
 
-/** What the database layer's commands return. Layer 1's whole contract is here (design/cli.md §4): a
-  * command computes one of these values and never prints, so a front end can render it as text, as
-  * JSON, or as a page; the machine readable requirement of `design/objective.md` is satisfied by
+/** What the database layer's commands return. Layer 1's whole contract is here (design/cli.md §4):
+  * a command computes one of these values and never prints, so a front end can render it as text,
+  * as JSON, or as a page; the machine readable requirement of `design/objective.md` is satisfied by
   * these types or nowhere. The http layer's results are its own, in `io.eezo.http.cli`.
   */
 

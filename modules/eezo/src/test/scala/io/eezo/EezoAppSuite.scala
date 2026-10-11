@@ -16,9 +16,9 @@ import io.eezo.http.{Handler, HttpServer, Method, PathPattern, Response, Route, 
   * What this suite pins: `sbt run` on an `EezoApp` answers `Nil` through the database layer, which
   * installs a `Database` around the http layer's `boot`, and `dev` is the one override, the drift
   * check under that same `Database` and then the http layer's dev server. Both are overrides of a
-  * hook each layer implements (`program`, `devServer`), and the compiler refuses a trait that stacks
-  * the two layers without overriding `program`, so the suite also pins that a hand stacking in
-  * either order does not compile. No Postgres is needed: `Database.connect` never waits on the
+  * hook each layer implements (`program`, `devServer`), and the compiler refuses a trait that
+  * stacks the two layers without overriding `program`, so the suite also pins that a hand stacking
+  * in either order does not compile. No Postgres is needed: `Database.connect` never waits on the
   * network, since the pool fills in the background, so a bogus URL installs and closes without a
   * query, and the drift check skips an empty schema and warns about a database it cannot reach.
   */

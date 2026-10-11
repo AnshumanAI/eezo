@@ -9,8 +9,8 @@ import io.eezo.core.support.Captured.captured
   * `super.commands`, and this suite pins the things the layers build on: an unknown first argument
   * is exit 2, `Nil` is `program` and is answered here rather than by an layer, two layers that both
   * implement `program` cannot be stacked without saying which one wins, a later mixin's arm shadows
-  * an earlier one's, `help` lays the table out once for every layer, and `emit` is the one place the
-  * `--json` choice is made.
+  * an earlier one's, `help` lays the table out once for every layer, and `emit` is the one place
+  * the `--json` choice is made.
   */
 class DispatchSuite extends munit.FunSuite {
 

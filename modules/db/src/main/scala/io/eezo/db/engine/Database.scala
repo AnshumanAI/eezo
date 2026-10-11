@@ -16,8 +16,9 @@ final class Database private[eezo] (private[eezo] val pool: Pool) {
 
 object Database {
 
-  /** Built at the layer, from parsed config, so that a bad URL fails in `main` with the config parse
-    * in the stack trace rather than at whatever moment something first touches a hidden holder.
+  /** Built at the layer, from parsed config, so that a bad URL fails in `main` with the config
+    * parse in the stack trace rather than at whatever moment something first touches a hidden
+    * holder.
     *
     * No parameter has a default so that `DbInit` is the one place that decides the pool's settings,
     * and a caller that skips it has to say what it wants.

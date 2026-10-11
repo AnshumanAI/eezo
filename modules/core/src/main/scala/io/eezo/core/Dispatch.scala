@@ -7,10 +7,10 @@ import io.eezo.core.internal.Json
   * layer's entry trait (`HttpApp`, `DbApp`) or the umbrella's `EezoApp`, and each of those chains
   * its own commands in front of [[commands]].
   *
-  * `core` cannot see either layer, so nothing here starts or stops anything: no server, no database,
-  * no lifecycle hook. What lives here is only what both layers would otherwise write twice, which is
-  * `main`, the unknown command answer, `help` over [[usage]], and the `--json` flag with the one
-  * error shape it implies.
+  * `core` cannot see either layer, so nothing here starts or stops anything: no server, no
+  * database, no lifecycle hook. What lives here is only what both layers would otherwise write
+  * twice, which is `main`, the unknown command answer, `help` over [[usage]], and the `--json` flag
+  * with the one error shape it implies.
   */
 trait Dispatch {
 
@@ -40,9 +40,9 @@ trait Dispatch {
   protected def usage: List[Usage] = Nil
 
   /** What `help` says after the command table and before its footer: the caveats that belong to no
-    * single row. Each layer writes `own ++ super.notes`, and they are kept apart from [[usage]] so a
-    * stacked application prints one table and then every layer's notes, rather than one layer's notes
-    * in the middle of the other's commands.
+    * single row. Each layer writes `own ++ super.notes`, and they are kept apart from [[usage]] so
+    * a stacked application prints one table and then every layer's notes, rather than one layer's
+    * notes in the middle of the other's commands.
     */
   protected def notes: List[String] = Nil
 
@@ -89,8 +89,9 @@ trait Dispatch {
     2
   }
 
-  /** The command table, padded once to the widest spelling, then the layers' notes, then the footer.
-    * `help` itself is a row of the same table, so it lines up with whatever the layers brought.
+  /** The command table, padded once to the widest spelling, then the layers' notes, then the
+    * footer. `help` itself is a row of the same table, so it lines up with whatever the layers
+    * brought.
     */
   private def help: String = {
     val rows  = usage :+ Usage("help", "this list")

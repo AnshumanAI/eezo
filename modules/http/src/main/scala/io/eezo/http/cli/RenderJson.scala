@@ -3,9 +3,9 @@ package io.eezo.http.cli
 import io.eezo.core.internal.Json
 import io.eezo.http.Route
 
-/** The machine side of this layer's CLI: the same result values [[Render]] turns into text, as JSON.
-  * The format rules, and why the encoding is written by hand over `Json` rather than derived, are
-  * explained once on the db layer's `RenderJson` (`io.eezo.db.cli.RenderJson`) and hold here
+/** The machine side of this layer's CLI: the same result values [[Render]] turns into text, as
+  * JSON. The format rules, and why the encoding is written by hand over `Json` rather than derived,
+  * are explained once on the db layer's `RenderJson` (`io.eezo.db.cli.RenderJson`) and hold here
   * unchanged: a `"command"` discriminator on every object, and shapes that are a contract for
   * tools.
   */

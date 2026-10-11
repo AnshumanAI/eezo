@@ -21,12 +21,12 @@ import io.eezo.live.LiveApp
   * that overrides `boot` still wins.
   *
   * What is this trait's own is the one idea both overrides spell: the http layer runs under the
-  * database. `program` is concrete in both layers, `boot()` in one and `withDatabase(boot())` in the
-  * other, so the compiler refuses any trait that stacks the two until it overrides `program` and
-  * says which; this one says the database layer's. A user's own `extends DbApp with HttpApp` fails
-  * the same way, in either order, instead of booting with no `Database` installed. `dev` composes
-  * through `devServer` alike: the drift check before the server comes up, and the refusal page in
-  * place of the app while the drift is dangerous, all under the same `Database`.
+  * database. `program` is concrete in both layers, `boot()` in one and `withDatabase(boot())` in
+  * the other, so the compiler refuses any trait that stacks the two until it overrides `program`
+  * and says which; this one says the database layer's. A user's own `extends DbApp with HttpApp`
+  * fails the same way, in either order, instead of booting with no `Database` installed. `dev`
+  * composes through `devServer` alike: the drift check before the server comes up, and the refusal
+  * page in place of the app while the drift is dangerous, all under the same `Database`.
   */
 trait EezoApp extends HttpApp with LiveApp with DbApp {
 

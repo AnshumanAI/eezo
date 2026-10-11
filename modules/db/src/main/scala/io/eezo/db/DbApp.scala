@@ -50,8 +50,8 @@ trait DbApp extends Dispatch with DbInit {
   def databaseSchema: String = "public"
 
   /** The program: what `sbt run` does, once, with a `Database` installed. Abstract, because a
-    * database only application is its program. The umbrella supplies the http layer's default, which
-    * is to serve.
+    * database only application is its program. The umbrella supplies the http layer's default,
+    * which is to serve.
     */
   def boot(): Unit
 
@@ -69,8 +69,8 @@ trait DbApp extends Dispatch with DbInit {
   }
 
   /** What `sbt run` does on this layer: [[boot]] with a `Database` installed around it. Concrete
-    * here and in the http layer both, so a trait that stacks the two inherits two and must say which
-    * one it means; the umbrella says this one. No `override` here, deliberately: see
+    * here and in the http layer both, so a trait that stacks the two inherits two and must say
+    * which one it means; the umbrella says this one. No `override` here, deliberately: see
     * `Dispatch.program`.
     */
   protected def program(): Unit = withDatabase(boot())

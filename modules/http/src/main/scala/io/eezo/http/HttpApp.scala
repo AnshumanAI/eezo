@@ -17,7 +17,8 @@ import io.eezo.http.cli.{Commands, Render, RenderJson}
   * from `Dispatch`: `sbt run` boots, `eezo dev` (the plugin's `eezoDev`, or `sbt "run dev"` without
   * the restart on save) serves with the listing and the reload client on, `eezo routes` prints the
   * table, and any other first argument is unknown. The database layer's commands do not exist here:
-  * an application that needs them depends on `eezo` and extends `EezoApp`, which stacks both layers.
+  * an application that needs them depends on `eezo` and extends `EezoApp`, which stacks both
+  * layers.
   *
   * [[serve]] is the only call site of `HttpServer.run` in the entry traits, so [[boot]] and `dev`
   * see the same overrides. Both are virtual hooks the umbrella overrides: [[program]] to run `boot`
