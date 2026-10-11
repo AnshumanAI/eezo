@@ -103,14 +103,16 @@ Every artifact is published at the same version, under the `io.eezo` group:
 | `eezo-core` | what the others build on: configuration, HTML tree and DSL, derivation, model keys                                   |
 | `sbt-eezo` | the sbt plugin that generates the route table, for sbt 1 and sbt 2                                                   |
 
-An application has one or two layers, the http layer and the database layer, and depends on the
-artifact of the layers it has. `eezo-http` alone carries `HttpApp`, `eezo-db` alone carries
-`DbApp`, and the umbrella carries both and `EezoApp`. [Layers](docs/explanation/layers.md) explains
-the split.
+An application has one or two layers, the http layer and the database layer. Use a layer by extending the appropriate trait in your app:
+- `DbApp` from `eezo-db`
+- `HttpApp` from `eezo-http`
+- `EezoApp` from `eezo` which mixes both
+
+The [Layers](docs/explanation/layers.md) doc explains more.
 
 ## Hello, eezo
 
-Two files. `src/main/scala/Main.scala`:
+To start, you need two files. In `src/main/scala/Main.scala`:
 
 ```scala
 import io.eezo.generated.Routes
@@ -122,7 +124,7 @@ object Main extends HttpApp {
 }
 ```
 
-`src/main/scala/app/Hello.scala`:
+Then in `src/main/scala/app/Hello.scala`:
 
 ```scala
 package app
@@ -143,9 +145,9 @@ object Hello {
 }
 ```
 
-The file is the route. The plugin reads `app/Hello.scala`, mounts `GET /hello` calling
-`def hello`, and writes the table to a generated `io.eezo.generated.Routes`, which `Main` names as
-its `routes`. A page is a value of eezo's own HTML DSL, not a template. `HttpApp` brings `main`
+The `Hello` file also the HTTP route. The plugin reads `app/Hello.scala`, mounts `GET /hello` calling
+`def hello`, and writes the table to a generated `io.eezo.generated.Routes`, which `Main` contains as
+its `routes`. A page is a value of Eezo's own HTML DSL. `HttpApp` brings `main`
 with it:
 
 ```bash
@@ -154,12 +156,13 @@ eezo dev             # serves, restarting on every save, with the route listing
 eezo routes          # prints the table
 ```
 
-[Your first eezo application](docs/tutorials/getting-started.md) walks through this in twenty
+[Your first eezo application](docs/tutorials/getting-started.md) walks through this in about 20
 minutes, and [Routing](docs/explanation/routing.md) says how a file name becomes a path.
 
 ## From a model to an application
 
-Add the database layer by depending on the umbrella, naming a schema, and deriving `Table`:
+Add the database layer by depending on the either `eezo` or just `eezo-db`. 
+Make your case class derive `Table`, then add your tables (one line) to your schema:
 
 ```scala
 import io.eezo.EezoApp
@@ -174,12 +177,12 @@ object Main extends EezoApp {
 ```
 
 `AppSchema` registers the models that derive `Table`, and the schema commands run against it:
-`status` shows the drift between the case classes and the database, `sync` applies it in
+`eezo status` shows the drift between the case classes and the database, `sync` applies it in
 development, `freeze` writes a migration, `migrate` runs the migrations in production. A model
 that derives `Table` beside `Form` and `Resource` gets its seven routes backed by Postgres, and
 the posts you create in the browser survive a restart.
-[The case class](docs/explanation/the-case-class.md) and
-[Schema and migrations](docs/explanation/schema-and-migrations.md) are the two pages behind this.
+Check out the [the case class](docs/explanation/the-case-class.md) and the
+[schema and migrations](docs/explanation/schema-and-migrations.md) pages for more details.
 
 One line in the model's companion guards its routes:
 
@@ -190,16 +193,16 @@ object Post {
 }
 ```
 
-Every route now needs a signed in user, five of them reach only the author's own rows, and the
+Every route now needs a signed-in user, five of them reach only the author's own rows, and the
 login page travels into the route table with the declaration.
-[Guards and ownership](docs/explanation/guards-and-ownership.md) has the rest.
+[Guards and ownership](docs/explanation/guards-and-ownership.md) explains more.
 
-The route table is a value, so `Main` can transform it before serving it. `Route.under("/admin")`
-moves a set of routes and every URL their pages emit, so the derived pages link to each other
+The route table is a value, so `Main` can transform it before serving it. For example, `Route.under("/admin")`
+moves a set of routes and every URL their pages emit under a path prefix. The derived pages link to each other
 without ever naming the prefix. [URLs and mounts](docs/explanation/urls-and-mounts.md) explains
-why an emitted URL is a value and a string is absolute.
+how it works.
 
-A live component holds its state on the server and the browser receives patches over one socket:
+A live component holds its state on the server and the browser receives patches over a websocket:
 
 ```scala
 final class Board extends Component[List[Order]] {
@@ -229,21 +232,19 @@ eezo build            stage the jars, the migrations and a Dockerfile
 eezo deploy           build, deploy to Fly.io, migrate, wait for health
 ```
 
-The launcher is [`bin/eezo`](bin/eezo) in this repository. Every command but `new` forwards to
-the application's own dispatch, `sbt "run <command>"`, or to a plugin task, so an application
-needs nothing beyond sbt and the commands work without the launcher on the path.
+The launcher is [`bin/eezo`](bin/eezo) in this repository.
 [The eezo command line](docs/reference/cli.md) is the reference, and
-[Deploy](docs/how-to/deploy.md) says what one deploy does.
+[Deploy](docs/how-to/deploy.md) explains how deploying works, and the possible deploy targets.
 
 ## Examples
 
-| example | artifact | entry trait | what it shows |
-|---|---|---|---|
-| [`hello`](examples/hello) | `eezo-http` | `HttpApp` | one handwritten route and no database |
-| [`reminders`](examples/reminders) | `eezo-db` | `DbApp` | one `Table` and a nightly job over its rows, no server |
-| [`blog`](examples/blog) | `eezo`, `eezo-auth` | `EezoApp` | a model deriving all three, guarded and mounted under `/admin` |
-| [`todo`](examples/todo) | `eezo` | `EezoApp` | a guided tour of the command line, every output captured from a real run |
-| [`shop`](examples/shop) | `eezo`, `eezo-auth` | `EezoApp` | a shop paying through Stripe, with a live sales board |
+| example | artifact | entry trait | what it shows                                                               |
+|---|---|---|-----------------------------------------------------------------------------|
+| [`hello`](examples/hello) | `eezo-http` | `HttpApp` | one handwritten route and no database                                       |
+| [`reminders`](examples/reminders) | `eezo-db` | `DbApp` | one `Table` and a nightly job over its rows, no server                      |
+| [`blog`](examples/blog) | `eezo`, `eezo-auth` | `EezoApp` | a model deriving all three type classes, guarded and mounted under `/admin` |
+| [`todo`](examples/todo) | `eezo` | `EezoApp` | a guided tour of the command line, every output captured from a real run    |
+| [`shop`](examples/shop) | `eezo`, `eezo-auth` | `EezoApp` | a shop paying through Stripe, with a live sales board                       |
 
 The examples build against the working tree rather than a release, so run them from a clone:
 
@@ -256,8 +257,7 @@ sbt "blog/run sync --apply"     # creates the tables, then:
 sbt blog/run                    # http://localhost:8080, posts under /admin/posts
 ```
 
-Each example has a README that explains its shape and shows the derivation of the layer it does
-not have failing to compile.
+Each example has a README that explains how it works.
 
 ## Documentation
 
@@ -299,12 +299,12 @@ sbt +test
 
 The `db` suite starts a real Postgres through testcontainers, so it needs a Docker daemon.
 `sbt check` runs the regression half of that suite, and `sbt backlog` runs the tests that
-describe open work and are expected to fail until it lands. The decisions behind the framework's shape
-are recorded in [`docs/adr`](docs/adr); read the one a change touches before changing what it decided.
+describe open work and are expected to fail until it lands. The decisions behind the framework
+are recorded in [`docs/adr`](docs/adr).
 
 ## Licence
 
-eezo is released under the [MIT License](LICENSE), copyright 2026 Riccardo Cardin and Daniel
-Ciocîrlan. An application that depends on eezo carries no obligation beyond preserving the
-copyright notice, and eezo takes on no dependency that would add one. Attribution notices for
+Eezo is released under the [MIT License](LICENSE), copyright 2026 Riccardo Cardin and Daniel
+Ciocîrlan. An application that depends on Eezo carries no obligation beyond preserving the
+copyright notice, and Eezo takes on no dependency that would add one. Attribution notices for
 third party components are collected in [NOTICE](NOTICE).
