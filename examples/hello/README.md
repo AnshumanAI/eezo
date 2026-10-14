@@ -26,8 +26,8 @@ The database layer. `eezo-http` does not depend on `eezo-db`, so nothing under `
 classpath, and the schema commands are not commands:
 
 ```
-$ sbt "hello/run status"
-[eezo] unknown command: status. Run `help` for the list.
+$ sbt "hello/run db status"
+[eezo] unknown command: db status. Run `help` for the list.
 ```
 
 A model deriving `Table` does not compile. The line, tried in `src/main/scala/models/Note.scala`

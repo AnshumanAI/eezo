@@ -57,7 +57,7 @@ object Landing {
     (
       "sky",
       "Migrations from the model",
-      "eezo freeze, then eezo migrate",
+      "eezo db freeze, then eezo db migrate",
       "Eezo detects schema diffs as you change your data model. Commit them to fingerprinted SQL migrations. On deploy they run before the new code takes traffic."
     ),
     (
