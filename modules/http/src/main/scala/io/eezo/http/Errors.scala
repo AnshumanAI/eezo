@@ -11,6 +11,10 @@ package io.eezo.http
   * challenge in the 401 arm, and an open base carrying a status is exactly the mechanism by which
   * an HTTP status reaches code that should not know one. See
   * `docs/adr/0001-http-errors-live-in-http-and-carry-no-status.md`.
+  *
+  * Four documents enumerate the set and move with it, so a widening of the set is a change to all
+  * of them: `docs/adr/0001`, `docs/adr/0006`, `docs/explanation/failures.md` and
+  * `docs/how-to/handle-failures.md`.
   */
 sealed abstract class EezoException(message: String) extends RuntimeException(message)
 
