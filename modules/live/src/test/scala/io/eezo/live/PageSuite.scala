@@ -185,6 +185,32 @@ class PageSuite extends munit.FunSuite {
     page.close()
   }
 
+  test("a join's resync replays the tree only when a frame was missed; otherwise it is empty") {
+    val topic          = new Topic[String]
+    val component      = new BoardComponent(topic)
+    val (frames, send) = collector()
+    val page           = new Page("p8", component)
+    val initial        = page.mount()
+
+    // Attached straight after the mount, nothing moved: the join's frame is empty.
+    page.attach(send)
+    page.resync(forced = false)
+    page.event(Event("click")) // a blocking call, so the resync before it is on the wire
+    assertEquals(frames.peek(), Nil, "nothing was owed to a client holding the mounted tree")
+    assertEquals(frames.size, 2)
+
+    // Detached, a frame drops: the next join's resync is the whole tree, and only that one.
+    page.detach()
+    page.event(Event("click"))
+    page.attach(send)
+    page.resync(forced = false)
+    page.resync(forced = false)
+    page.event(Event("click"))
+    val afterRejoin = frames.toArray(Array.empty[List[Patch]]).drop(2).toList
+    assertEquals(afterRejoin.count(_.exists(_.isInstanceOf[Patch.SetChildren])), 1, afterRejoin)
+    assertEquals(replayed(initial, frames).last, component.render(Board(3, Nil)))
+  }
+
   test("frames reach only an attached listener; with none attached they drop without a throw") {
     val topic          = new Topic[String]
     val component      = new BoardComponent(topic)

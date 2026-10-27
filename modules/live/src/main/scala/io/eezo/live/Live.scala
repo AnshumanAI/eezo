@@ -259,9 +259,9 @@ object Live {
               log.log(System.Logger.Level.WARNING, s"page $id sent a malformed frame: $problem")
               conn.send(Wire.error(problem))
             case Right(Wire.ClientMessage.Join(base)) =>
-              // The reported base is the prefix the client's DOM was rewritten with; the resync
-              // that follows carries the tree rebased to match, and starts the client from
-              // whatever moved between mount and join (design/live.md §2.6).
+              // The reported base is the prefix the client's DOM was rewritten with; the frame
+              // that follows carries the tree rebased to match when anything moved between mount
+              // and join (design/live.md §2.6), and is empty otherwise.
               mountPrefix(base) match {
                 case Some(prefix) => page.rebase(prefix)
                 case None         =>
@@ -270,7 +270,7 @@ object Live {
                     s"page $id sent a dubious base '$base'; ignored"
                   )
               }
-              page.resync()
+              page.resync(forced = false)
             case Right(Wire.ClientMessage.Emit(event)) =>
               try page.event(event)
               catch {
