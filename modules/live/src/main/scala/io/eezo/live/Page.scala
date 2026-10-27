@@ -24,7 +24,7 @@ import io.eezo.core.html.Html
   *     Jetty's own demand loop. Nothing is queued unboundedly and nothing is dropped.
   *   - **Topic deliveries never block their publisher** ([[post]]): they enqueue and return. A full
   *     mailbox drops the delivery and records it; the loop answers with one full resync, so the DOM
-  *     stays honest about the state — which has genuinely missed those messages, because a
+  *     stays honest about the state, which has genuinely missed those messages, because a
   *     subscriber slower than its publisher misses messages or grows without bound, and eezo
   *     chooses the honest loss (design/live.md §1.1 on §4.5).
   *
@@ -80,8 +80,8 @@ private[live] final class Page[S](
 
   /** Runs `init`, renders and validates the first tree, starts the page thread, and returns the
     * tree for the mount to embed. A failing `init` or a non-canonical first render propagates to
-    * the caller — the HTTP request that is mounting — after cancelling whatever subscriptions
-    * `init` already made.
+    * the caller, the HTTP request that is mounting, after cancelling whatever subscriptions `init`
+    * already made.
     */
   def mount(): Html.Element = {
     val ctx = new Init[S](post)
@@ -180,7 +180,7 @@ private[live] final class Page[S](
   private[live] def detach(): Unit = listener = None
 
   /** Stops the page: cancels its subscriptions, stops the thread, and fails whatever callers were
-    * still waiting. Idempotent, callable from any thread — the registry reaps through this.
+    * still waiting. Idempotent, callable from any thread: the registry reaps through this.
     */
   def close(): Unit = {
     closed = true
@@ -288,7 +288,7 @@ private[live] final class Page[S](
 
   /** The state folded through the batch, with each blocked caller's individual outcome: an event
     * whose `handle` throws fails alone and moves nothing; the rest of the batch still applies. A
-    * topic transition that throws is logged and skipped — nobody is waiting on it.
+    * topic transition that throws is logged and skipped, since nobody is waiting on it.
     */
   private def applied(work: List[Msg]): (S, List[(Promise[Unit], Option[Throwable])]) =
     work.foldLeft((state, List.empty[(Promise[Unit], Option[Throwable])])) {

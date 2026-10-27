@@ -10,7 +10,7 @@ import io.eezo.core.html.Tags.*
 
 /** The one-writer contract, held under fire: simultaneous client events and topic publishes against
   * one page, and both the final state and the final DOM come out right. The DOM assertion is the
-  * sharp one — every emitted frame, applied in emission order from the initial tree, must land
+  * sharp one: every emitted frame, applied in emission order from the initial tree, must land
   * exactly on the final render, which fails if any diff was ever computed against a baseline the
   * client did not hold.
   */
