@@ -103,6 +103,17 @@ jobs:
       # Nothing inside this repository exercises the plugin end to end, because a plugin defined in
       # a build cannot be enabled by that same build. `blog` is what covers the derived half: its
       # seven routes exist only in the file the generator writes.
+      #
+      # `blog` has a `tailwind.css`, so its build fetches the Tailwind CLI into `~/.eezo/tools` once
+      # per version; cached here so the download is paid once per runner image and version rather
+      # than on every run. The version is `tailwindVersion` in build.sbt, so the key hashes that
+      # file: a bump misses the cache, and nothing here has to be kept in step by hand.
+      - name: Cache the fetched tools
+        uses: actions/cache@v4
+        with:
+          path: ~/.eezo/tools
+          key: eezo-tools-${{ runner.os }}-${{ hashFiles('build.sbt') }}
+
       - name: Build the example applications
         run: |
           sbt -batch publishLocalForExample
