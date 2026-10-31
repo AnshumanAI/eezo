@@ -106,11 +106,15 @@ object Migration {
       if (j < body.length) j + 1 else j
     }
 
+    def precededByIdentChar(at: Int): Boolean =
+      at > 0 && (body(at - 1).isLetterOrDigit || body(at - 1) == '_' || body(at - 1) == '$')
+
     /** `$$`, or `$tag$` with a tag of letters, digits and underscores. Nothing else, so `$1` stays
-      * a parameter.
+      * a parameter. Postgres allows `$` inside an unquoted identifier, so `foo$tag$` is one
+      * identifier and not `foo` followed by an opener.
       */
     def dollarDelimiter(at: Int): Option[String] =
-      if (at >= body.length || body(at) != '$') None
+      if (at >= body.length || body(at) != '$' || precededByIdentChar(at)) None
       else if (at + 1 < body.length && body(at + 1) == '$') Some("$$")
       else {
         var j = at + 1
