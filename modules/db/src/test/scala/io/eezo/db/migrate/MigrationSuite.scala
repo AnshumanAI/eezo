@@ -133,6 +133,10 @@ class MigrationSuite extends FunSuite {
     )
   )
 
+  roundTrips("a dollar sign inside an unquoted identifier does not open a dollar quote")(
+    List("create table foo$tag$ (v text default 'a; b')")
+  )
+
   roundTrips("a line of a literal that starts with a comment mark is kept")(
     List(
       "insert into t (v) values ('first\n-- not a comment\na; b')",
